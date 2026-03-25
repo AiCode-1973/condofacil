@@ -22,6 +22,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Formato de e-mail inválido.");
     }
 
+    // --- CONEXÃO COM O BANCO MYSQL ---
+    require_once 'conexao.php';
+
+    try {
+        // Cria a tabela automaticamente caso seja a primeira vez que executa e não exista
+        $pdo->exec("CREATE TABLE IF NOT EXISTS contatos (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            nome VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL,
+            telefone VARCHAR(50) NOT NULL,
+            tipo_condominio VARCHAR(50) NOT NULL,
+            mensagem TEXT,
+            data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )");
+
+        // Prepara a inserção segura dos dados no banco para evitar SQL Injection
+        $stmt = $pdo->prepare("INSERT INTO contatos (nome, email, telefone, tipo_condominio, mensagem) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$nome, $email, $telefone, $tipo_condominio, $mensagem]);
+    } catch (\PDOException $e) {
+        die("Erro ao salvar os dados no banco: " . $e->getMessage());
+    }
+    // ---------------------------------
+
     // Monta o corpo da mensagem em HTML
     $corpo_mensagem = "
     <html>
