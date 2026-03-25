@@ -55,12 +55,12 @@
     </nav>
 
     <!-- 1. Hero (topo da página) -->
-    <section class="pt-32 pb-20 bg-gradient-to-br from-blue-50 to-white overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
-                CondoFácil – O sistema completo para <span class="text-primary">administração de condomínios</span>
+    <section class="pt-28 md:pt-32 pb-16 md:pb-20 bg-gradient-to-br from-blue-50 to-white overflow-hidden px-4">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 text-center">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4 md:leading-tight">
+                CondoFácil – O sistema completo para <span class="text-primary block sm:inline">administração de condomínios</span>
             </h1>
-            <p class="mt-4 text-xl text-slate-600 max-w-3xl mx-auto mb-8">
+            <p class="mt-4 text-lg sm:text-xl text-slate-600 max-w-3xl mx-auto mb-8">
                 Centralize reservas de áreas, avisos, ocorrências, regras e chat com a administração em um único lugar, simples e fácil de usar.
             </p>
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-8">
@@ -233,25 +233,26 @@
     <!-- 6 & 7. Seção “Modelo SaaS e acesso” & "Prova social" -->
     <section class="py-20 bg-slate-50 border-y border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-                <div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div class="order-2 lg:order-1">
                     <h2 class="text-3xl font-bold text-slate-900 mb-4">100% online, sempre atualizado</h2>
                     <p class="text-lg text-slate-600 mb-6">
                         O CondoFácil é um sistema SaaS (Software como Serviço): você acessa pelo navegador, sem precisar instalar nada no computador.
                         Todas as atualizações de melhoria e correções são feitas automaticamente, sem interrupção para o condomínio.
                     </p>
-                    <ul class="space-y-2 text-slate-700 font-medium">
-                        <li><i class="fa-solid fa-lock text-primary mr-2"></i> Acesso seguro por login e senha</li>
-                        <li><i class="fa-solid fa-sliders text-primary mr-2"></i> Diferentes níveis de permissão (síndico, administradora, morador)</li>
+                    <ul class="space-y-4 lg:space-y-2 text-slate-700 font-medium">
+                        <li class="flex items-center"><i class="fa-solid fa-lock text-primary mr-3 w-5 text-center"></i> Acesso seguro por login e senha</li>
+                        <li class="flex items-center"><i class="fa-solid fa-sliders text-primary mr-3 w-5 text-center"></i> Diferentes níveis de permissão</li>
                     </ul>
                 </div>
-                <div>
+                <div class="order-1 lg:order-2">
                     <h2 class="text-3xl font-bold text-slate-900 mb-4">Transparência e organização na gestão</h2>
                     <p class="text-lg text-slate-600 mb-6">
                         O CondoFácil foi pensado para dar mais segurança, rastreabilidade e clareza a tudo o que acontece no condomínio. Comunicação, reservas e ocorrências deixam de ser algo solto e passam a ser registrados em um sistema único.
                     </p>
-                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-100 italic text-slate-600">
-                        "O sistema ideal que estávamos procurando para tirar os problemas do WhatsApp e trazer profissionalismo para nossa gestão."
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-100 italic text-slate-600 relative">
+                        <i class="fa-solid fa-quote-left text-primary/20 text-4xl absolute top-4 left-4"></i>
+                        <p class="relative z-10 pl-8">"O sistema ideal que estávamos procurando para tirar os problemas do WhatsApp e trazer profissionalismo para nossa gestão."</p>
                     </div>
                 </div>
             </div>
