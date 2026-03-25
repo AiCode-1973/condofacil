@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
     $mensagem = trim($_POST['mensagem']);
     
     if (!empty($mensagem) && !empty($morador_id)) {
-        $stmt = $pdo->prepare("INSERT INTO mensagens_chat (condominio_id, remetente_id, receptor_id, mensagem, lida) VALUES (?, ?, ?, ?, 0)");
+        $stmt = $pdo->prepare("INSERT INTO mensagens_chat (condominio_id, remetente_id, destinatario_id, mensagem, lida) VALUES (?, ?, ?, ?, 0)");
         $stmt->execute([$condominioId, $sindicoId, $morador_id, $mensagem]);
     }
     // O POST fará reload na mesma página (se houver chat aberto, o JS precisaria de AJAX, mas vamos mantê-lo procedural simples)
@@ -43,11 +43,11 @@ if ($chatAtivo) {
 
     if ($moradorAtivo) {
         // Marca as mensagens RECEBIDAS do morador como lidass
-        $stmt = $pdo->prepare("UPDATE mensagens_chat SET lida = 1 WHERE remetente_id = ? AND receptor_id = ?");
+        $stmt = $pdo->prepare("UPDATE mensagens_chat SET lida = 1 WHERE remetente_id = ? AND destinatario_id = ?");
         $stmt->execute([$chatAtivo, $sindicoId]);
 
         // Carregar a conversa (Síndico enviou para Morador OR Morador enviou para Síndico)
-        $stmt = $pdo->prepare("SELECT * FROM mensagens_chat WHERE (remetente_id = ? AND receptor_id = ?) OR (remetente_id = ? AND receptor_id = ?) ORDER BY data_envio ASC");
+        $stmt = $pdo->prepare("SELECT * FROM mensagens_chat WHERE (remetente_id = ? AND destinatario_id = ?) OR (remetente_id = ? AND destinatario_id = ?) ORDER BY created_at ASC");
         $stmt->execute([$sindicoId, $chatAtivo, $chatAtivo, $sindicoId]);
         $mensagens = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -160,7 +160,7 @@ if ($chatAtivo) {
                                 <div class="max-w-[85%] sm:max-w-[75%] rounded-2xl p-3 sm:p-4 relative shadow-sm <?php echo $isMyMessage ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-white text-gray-800 rounded-tl-none'; ?>">
                                     <p class="text-sm leading-relaxed whitespace-pre-wrap"><?php echo htmlspecialchars($msg['mensagem']); ?></p>
                                     <div class="text-[10px] sm:text-xs text-right mt-1.5 opacity-80 flex items-center justify-end gap-1">
-                                        <?php echo date('H:i', strtotime($msg['data_envio'])); ?>
+                                        <?php echo date('H:i', strtotime($msg['created_at'])); ?>
                                         <?php if($isMyMessage): ?>
                                             <i class="fa-solid fa-check-double <?php echo $msg['lida'] ? 'text-blue-300' : 'text-gray-300'; ?>"></i>
                                         <?php endif; ?>

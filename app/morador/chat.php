@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
     $mensagem = trim($_POST['mensagem']);
     
     if (!empty($mensagem)) {
-        $stmt = $pdo->prepare("INSERT INTO mensagens_chat (condominio_id, remetente_id, receptor_id, mensagem, lida) VALUES (?, ?, ?, ?, 0)");
+        $stmt = $pdo->prepare("INSERT INTO mensagens_chat (condominio_id, remetente_id, destinatario_id, mensagem, lida) VALUES (?, ?, ?, ?, 0)");
         $stmt->execute([$condominioId, $moradorId, $sindicoId, $mensagem]);
     }
     header("Location: chat.php");
@@ -34,11 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
 }
 
 // 3. Marca as mensagens RECEBIDAS do síndico como lidas
-$stmt = $pdo->prepare("UPDATE mensagens_chat SET lida = 1 WHERE remetente_id = ? AND receptor_id = ?");
+$stmt = $pdo->prepare("UPDATE mensagens_chat SET lida = 1 WHERE remetente_id = ? AND destinatario_id = ?");
 $stmt->execute([$sindicoId, $moradorId]);
 
 // 4. Carregar a conversa (Síndico para Morador OR Morador para Síndico)
-$stmt = $pdo->prepare("SELECT * FROM mensagens_chat WHERE (remetente_id = ? AND receptor_id = ?) OR (remetente_id = ? AND receptor_id = ?) ORDER BY data_envio ASC");
+$stmt = $pdo->prepare("SELECT * FROM mensagens_chat WHERE (remetente_id = ? AND destinatario_id = ?) OR (remetente_id = ? AND destinatario_id = ?) ORDER BY created_at ASC");
 $stmt->execute([$sindicoId, $moradorId, $moradorId, $sindicoId]);
 $mensagens = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -114,7 +114,7 @@ $mensagens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             
                             <!-- Metadados da Mensagem -->
                             <div class="flex items-center gap-1.5 self-end text-[11px] opacity-70 mt-1">
-                                <span><?php echo date('H:i', strtotime($msg['data_envio'])); ?></span>
+                                <span><?php echo date('H:i', strtotime($msg['created_at'])); ?></span>
                                 <?php if($souEu): ?>
                                     <i class="fa-solid fa-check-double <?php echo $msg['lida'] ? 'text-blue-500 opacity-100' : 'text-gray-400'; ?>"></i>
                                 <?php endif; ?>
