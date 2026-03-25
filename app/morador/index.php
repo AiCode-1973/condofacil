@@ -43,16 +43,15 @@ $minhasOcorrencias->execute([$condominioId, $moradorId]);
 $minhasOcorrencias = $minhasOcorrencias->fetchColumn();
 
 // Últimos Avisos
-$ultimosAvisos = $pdo->prepare("SELECT * FROM avisos WHERE condominio_id = ? ORDER BY created_at DESC LIMIT 3");
+$ultimosAvisos = $pdo->prepare("SELECT * FROM avisos WHERE condominio_id = ? ORDER BY fixado DESC, created_at DESC LIMIT 3");
 $ultimosAvisos->execute([$condominioId]);
 $ultimosAvisos = $ultimosAvisos->fetchAll(PDO::FETCH_ASSOC);
 
-function badgePrioridade($prioridade) {
-    switch($prioridade) {
-        case 'urgente': return '<span class="px-2 py-0.5 bg-red-100 text-red-800 text-[10px] uppercase font-bold rounded shadow-sm">Urgente</span>';
-        case 'alerta': return '<span class="px-2 py-0.5 bg-yellow-100 text-yellow-800 text-[10px] uppercase font-bold rounded shadow-sm">Alerta</span>';
-        default: return '<span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] uppercase font-bold rounded shadow-sm">Informativo</span>';
+function badgeFixado($fixado) {
+    if ($fixado) {
+        return '<span class="px-2 py-0.5 bg-yellow-100 text-yellow-800 text-[10px] uppercase font-bold rounded shadow-sm"><i class="fa-solid fa-thumbtack mr-1"></i> Fixado</span>';
     }
+    return '<span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] uppercase font-bold rounded shadow-sm">Aviso</span>';
 }
 ?>
 <!DOCTYPE html>
@@ -252,7 +251,7 @@ function badgePrioridade($prioridade) {
                                             <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                                                 <div class="flex-1">
                                                     <div class="flex items-center gap-3 mb-2">
-                                                        <?php echo badgePrioridade($aviso['prioridade']); ?>
+                                                        <?php echo badgeFixado($aviso['fixado']); ?>
                                                         <span class="text-xs font-semibold text-gray-400 flex items-center gap-1">
                                                             <i class="fa-regular fa-clock"></i> 
                                                             <?php echo date('d/m/Y', strtotime($aviso['created_at'])); ?> 
