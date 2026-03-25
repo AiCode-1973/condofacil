@@ -39,20 +39,29 @@ $condominioNome = $condominioNome->fetchColumn() ?: "Seu Condomínio";
             </span>
         </div>
         <nav class="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">
-            <a href="index.php" class="flex items-center gap-3 p-3 bg-slate-700 rounded-lg transition">
+            <a href="index.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
                 <i class="fa-solid fa-house w-5 text-center"></i> Início
             </a>
-            <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition">
+            <a href="moradores.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'moradores.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
                 <i class="fa-solid fa-users w-5 text-center"></i> Moradores
             </a>
-            <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition">
+            <a href="avisos.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
                 <i class="fa-solid fa-bullhorn w-5 text-center"></i> Avisos
             </a>
-            <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition">
+            <a href="areas_comuns.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'areas_comuns.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
+                <i class="fa-solid fa-swimming-pool w-5 text-center"></i> Áreas Comuns
+            </a>
+            <a href="reservas.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'reservas.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
                 <i class="fa-solid fa-calendar-check w-5 text-center"></i> Reservas Adm
             </a>
-            <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition">
+            <a href="ocorrencias.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'ocorrencias.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
                 <i class="fa-solid fa-clipboard-list w-5 text-center"></i> Ocorrências
+            </a>
+            <a href="regras.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'regras.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
+                <i class="fa-solid fa-scale-balanced w-5 text-center"></i> Regras
+            </a>
+            <a href="chat.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'chat.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
+                <i class="fa-solid fa-comments w-5 text-center"></i> Chat / Mensagens
             </a>
         </nav>
         <div class="p-4 border-t border-slate-700 bg-slate-900">
@@ -71,9 +80,9 @@ $condominioNome = $condominioNome->fetchColumn() ?: "Seu Condomínio";
         <header class="bg-white shadow-sm px-8 py-5 border-b border-gray-200 flex justify-between items-center">
             <h1 class="text-2xl font-bold text-gray-800">Painel do Síndico</h1>
             <div class="flex gap-4">
-                 <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 shadow-sm">
+                 <a href="avisos.php" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 shadow-sm">
                     <i class="fa-solid fa-plus"></i> Novo Aviso
-                </button>
+                </a>
             </div>
         </header>
 

@@ -75,20 +75,23 @@ $condominioNome = $condominioNome->fetchColumn() ?: "Meu Condomínio";
         </div>
 
         <nav class="flex-1 p-2 md:p-4 space-y-1 overflow-y-auto">
-            <a href="index.php" class="flex items-center gap-3 p-3 bg-green-800 text-green-50 rounded-lg transition-colors font-medium">
+            <a href="index.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
                 <i class="fa-solid fa-house w-6 text-center"></i> Início
             </a>
-            <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-green-600 text-green-100 hover:text-white transition-colors">
-                <i class="fa-solid fa-bell w-6 text-center"></i> Avisos <span class="ml-auto bg-red-500 text-xs px-2 py-0.5 rounded-full">0</span>
+            <a href="avisos.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
+                <i class="fa-solid fa-bell w-6 text-center"></i> Avisos
             </a>
-            <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-green-600 text-green-100 hover:text-white transition-colors">
+            <a href="reservas.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'reservas.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
                 <i class="fa-solid fa-calendar-check w-6 text-center"></i> Minhas Reservas
             </a>
-            <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-green-600 text-green-100 hover:text-white transition-colors">
+            <a href="ocorrencias.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'ocorrencias.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
                 <i class="fa-solid fa-triangle-exclamation w-6 text-center"></i> Ocorrências
             </a>
-            <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-green-600 text-green-100 hover:text-white transition-colors">
-                <i class="fa-regular fa-comments w-6 text-center"></i> Falar com Síndico
+            <a href="regras.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'regras.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
+                <i class="fa-solid fa-scale-balanced w-6 text-center"></i> Regras
+            </a>
+            <a href="chat.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'chat.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
+                <i class="fa-solid fa-comments w-6 text-center"></i> Falar com Síndico
             </a>
         </nav>
 
@@ -123,9 +126,9 @@ $condominioNome = $condominioNome->fetchColumn() ?: "Meu Condomínio";
                 <p class="text-sm text-gray-500">Veja o que está acontecendo no seu condomínio.</p>
             </div>
             
-             <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-bold transition flex items-center gap-2 shadow-md shadow-green-500/20">
+             <a href="ocorrencias.php" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-bold transition flex items-center gap-2 shadow-md shadow-green-500/20">
                 <i class="fa-solid fa-ticket"></i> Nova Ocorrência
-            </button>
+            </a>
         </header>
 
         <!-- Container Principal de Conteúdo -->
@@ -135,7 +138,7 @@ $condominioNome = $condominioNome->fetchColumn() ?: "Meu Condomínio";
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
                 
                 <!-- Card -->
-                <a href="#" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-5 hover:shadow-md transition-shadow flex flex-col relative overflow-hidden group">
+                <a href="avisos.php" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-5 hover:shadow-md transition-shadow flex flex-col relative overflow-hidden group">
                     <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                         <i class="fa-solid fa-bell text-5xl text-yellow-500"></i>
                     </div>
@@ -150,7 +153,7 @@ $condominioNome = $condominioNome->fetchColumn() ?: "Meu Condomínio";
                 </a>
 
                 <!-- Card -->
-                <a href="#" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-5 hover:shadow-md transition-shadow flex flex-col relative overflow-hidden group">
+                <a href="reservas.php" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-5 hover:shadow-md transition-shadow flex flex-col relative overflow-hidden group">
                     <!-- ... repetido padrão de design ... -->
                     <div class="flex items-center justify-between mb-2 md:mb-4">
                         <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg">
@@ -162,18 +165,18 @@ $condominioNome = $condominioNome->fetchColumn() ?: "Meu Condomínio";
                 </a>
 
                  <!-- Card -->
-                <a href="#" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-5 hover:shadow-md transition-shadow flex flex-col relative overflow-hidden">
+                <a href="chat.php" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-5 hover:shadow-md transition-shadow flex flex-col relative overflow-hidden">
                     <div class="flex items-center justify-between mb-2 md:mb-4">
                         <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-box-open"></i>
+                            <i class="fa-solid fa-comments"></i>
                         </div>
                     </div>
-                    <p class="text-2xl md:text-3xl font-bold text-gray-800">0</p>
-                    <p class="text-xs md:text-sm font-medium text-gray-500 mt-1">Encomendas</p>
+                    <p class="text-2xl md:text-3xl font-bold text-gray-800">-</p>
+                    <p class="text-xs md:text-sm font-medium text-gray-500 mt-1">Chat / Mensagens</p>
                 </a>
                 
                  <!-- Card -->
-                <a href="#" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-5 hover:shadow-md transition-shadow flex flex-col relative overflow-hidden">
+                <a href="ocorrencias.php" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-5 hover:shadow-md transition-shadow flex flex-col relative overflow-hidden">
                     <div class="flex items-center justify-between mb-2 md:mb-4">
                         <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-lg">
                             <i class="fa-solid fa-triangle-exclamation"></i>

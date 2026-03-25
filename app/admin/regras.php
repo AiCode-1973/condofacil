@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($titulo) && !empty($conteudo)) {
             // Usa ON DUPLICATE KEY UPDATE ou um simples INSERT já que são várias regras?
             // Dependendo do banco pode ser um texto único, mas vamos fazer como "Artigos/Tópicos" de regra.
-            $stmt = $pdo->prepare("INSERT INTO regras (condominio_id, titulo, conteudo, data_atualizacao) VALUES (?, ?, ?, NOW())");
+            $stmt = $pdo->prepare("INSERT INTO regras (condominio_id, titulo, conteudo) VALUES (?, ?, ?)");
             if ($stmt->execute([$condominioId, $titulo, $conteudo])) {
                 $mensagemSucesso = "Regra/Documento adicionado com sucesso!";
             } else {
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Buscar regras do condomínio
-$stmt = $pdo->prepare("SELECT * FROM regras WHERE condominio_id = ? ORDER BY data_atualizacao DESC");
+$stmt = $pdo->prepare("SELECT * FROM regras WHERE condominio_id = ? ORDER BY created_at DESC");
 $stmt->execute([$condominioId]);
 $regras = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -62,27 +62,30 @@ $regras = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <i class="fa-solid fa-hotel text-3xl text-green-400"></i>
             <span class="text-sm uppercase tracking-wide text-slate-300">Administração</span>
         </div>
-        <nav class="flex-1 p-4 space-y-1">
-            <a href="index.php" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition">
+        <nav class="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">
+            <a href="index.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
                 <i class="fa-solid fa-house w-5 text-center"></i> Início
             </a>
-            <a href="avisos.php" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition">
+            <a href="moradores.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'moradores.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
+                <i class="fa-solid fa-users w-5 text-center"></i> Moradores
+            </a>
+            <a href="avisos.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
                 <i class="fa-solid fa-bullhorn w-5 text-center"></i> Avisos
             </a>
-            <a href="areas_comuns.php" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition">
+            <a href="areas_comuns.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'areas_comuns.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
                 <i class="fa-solid fa-swimming-pool w-5 text-center"></i> Áreas Comuns
             </a>
-            <a href="reservas.php" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition">
-                <i class="fa-solid fa-calendar-check w-5 text-center"></i> Reservas
+            <a href="reservas.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'reservas.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
+                <i class="fa-solid fa-calendar-check w-5 text-center"></i> Reservas Adm
             </a>
-            <a href="ocorrencias.php" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition">
+            <a href="ocorrencias.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'ocorrencias.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
                 <i class="fa-solid fa-clipboard-list w-5 text-center"></i> Ocorrências
             </a>
-            <a href="regras.php" class="flex items-center gap-3 p-3 bg-slate-700 rounded-lg transition">
-                <i class="fa-solid fa-book w-5 text-center"></i> Regras Internas
+            <a href="regras.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'regras.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
+                <i class="fa-solid fa-scale-balanced w-5 text-center"></i> Regras
             </a>
-            <a href="../logout.php" class="flex items-center gap-3 p-3 mt-4 text-red-400 hover:bg-slate-700 transition rounded-lg">
-                <i class="fa-solid fa-right-from-bracket w-5 text-center"></i> Sair
+            <a href="chat.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'chat.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
+                <i class="fa-solid fa-comments w-5 text-center"></i> Chat / Mensagens
             </a>
         </nav>
     </aside>
@@ -144,7 +147,7 @@ $regras = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <?php echo htmlspecialchars($regra['conteudo']); ?>
                                         </div>
                                         <div class="mt-4 pt-3 border-t border-gray-200 text-xs text-gray-400 flex items-center gap-1">
-                                            <i class="fa-regular fa-clock"></i> Última atualização: <?php echo date('d/m/Y H:i', strtotime($regra['data_atualizacao'])); ?>
+                                            <i class="fa-regular fa-clock"></i> Última atualização: <?php echo date('d/m/Y H:i', strtotime($regra['created_at'])); ?>
                                         </div>
                                     </div>
                                 <?php endforeach; ?>

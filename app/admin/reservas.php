@@ -29,7 +29,7 @@ $sql = "
     JOIN areas_comuns a ON r.area_id = a.id 
     JOIN usuarios u ON r.usuario_id = u.id 
     WHERE r.condominio_id = ? 
-    ORDER BY r.data_reserva DESC, r.hora_inicio ASC
+    ORDER BY r.data_reserva DESC, r.horario_inicio ASC
 ";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$condominioId]);
@@ -61,21 +61,30 @@ function badgeStatus($status) {
             <i class="fa-solid fa-hotel text-3xl text-green-400"></i>
             <span class="text-sm uppercase tracking-wide text-slate-300">Administração</span>
         </div>
-        <nav class="flex-1 p-4 space-y-1">
-            <a href="index.php" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition">
+        <nav class="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">
+            <a href="index.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
                 <i class="fa-solid fa-house w-5 text-center"></i> Início
             </a>
-            <a href="avisos.php" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition">
+            <a href="moradores.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'moradores.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
+                <i class="fa-solid fa-users w-5 text-center"></i> Moradores
+            </a>
+            <a href="avisos.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
                 <i class="fa-solid fa-bullhorn w-5 text-center"></i> Avisos
             </a>
-            <a href="areas_comuns.php" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition">
+            <a href="areas_comuns.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'areas_comuns.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
                 <i class="fa-solid fa-swimming-pool w-5 text-center"></i> Áreas Comuns
             </a>
-            <a href="reservas.php" class="flex items-center gap-3 p-3 bg-slate-700 rounded-lg transition">
-                <i class="fa-solid fa-calendar-check w-5 text-center"></i> Gestão de Reservas
+            <a href="reservas.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'reservas.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
+                <i class="fa-solid fa-calendar-check w-5 text-center"></i> Reservas Adm
             </a>
-            <a href="../logout.php" class="flex items-center gap-3 p-3 mt-4 text-red-400 hover:bg-slate-700 transition rounded-lg">
-                <i class="fa-solid fa-right-from-bracket w-5 text-center"></i> Sair
+            <a href="ocorrencias.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'ocorrencias.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
+                <i class="fa-solid fa-clipboard-list w-5 text-center"></i> Ocorrências
+            </a>
+            <a href="regras.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'regras.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
+                <i class="fa-solid fa-scale-balanced w-5 text-center"></i> Regras
+            </a>
+            <a href="chat.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'chat.php' ? 'bg-slate-700' : 'hover:bg-slate-700' ?> rounded-lg transition">
+                <i class="fa-solid fa-comments w-5 text-center"></i> Chat / Mensagens
             </a>
         </nav>
     </aside>
@@ -118,7 +127,7 @@ function badgeStatus($status) {
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900"><i class="fa-regular fa-calendar text-gray-400 mr-1"></i> <?php echo date('d/m/Y', strtotime($res['data_reserva'])); ?></div>
-                                            <div class="text-sm text-gray-500"><i class="fa-regular fa-clock text-gray-400 mr-1"></i> <?php echo substr($res['hora_inicio'], 0, 5); ?> às <?php echo substr($res['hora_fim'], 0, 5); ?></div>
+                                            <div class="text-sm text-gray-500"><i class="fa-regular fa-clock text-gray-400 mr-1"></i> <?php echo substr($res['horario_inicio'], 0, 5); ?> às <?php echo substr($res['horario_fim'], 0, 5); ?></div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <?php echo badgeStatus($res['status']); ?>

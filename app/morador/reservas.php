@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
         if (strtotime($data_reserva) < strtotime(date('Y-m-d'))) {
              $mensagemErro = "Você não pode reservar em uma data que já passou.";
         } else {
-            $stmt = $pdo->prepare("INSERT INTO reservas (condominio_id, usuario_id, area_id, data_reserva, hora_inicio, hora_fim, status, data_solicitacao) VALUES (?, ?, ?, ?, ?, ?, 'pendente', NOW())");
+            $stmt = $pdo->prepare("INSERT INTO reservas (condominio_id, usuario_id, area_id, data_reserva, horario_inicio, horario_fim, status, created_at) VALUES (?, ?, ?, ?, ?, ?, 'pendente', NOW())");
             if ($stmt->execute([$condominioId, $usuarioId, $area_id, $data_reserva, $hora_inicio, $hora_fim])) {
                 $mensagemSucesso = "Solicitação de reserva enviada! Aguardando aprovação do síndico.";
             } else {
@@ -51,7 +51,7 @@ $stmt->execute([$condominioId]);
 $areas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Buscar histórico de reservas do morador
-$sql = "SELECT r.*, a.nome as area_nome FROM reservas r JOIN areas_comuns a ON r.area_id = a.id WHERE r.usuario_id = ? ORDER BY r.data_reserva DESC, r.hora_inicio ASC";
+$sql = "SELECT r.*, a.nome as area_nome FROM reservas r JOIN areas_comuns a ON r.area_id = a.id WHERE r.usuario_id = ? ORDER BY r.data_reserva DESC, r.horario_inicio ASC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$usuarioId]);
 $minhas_reservas = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -100,18 +100,24 @@ function badgeStatus($status) {
             <i class="fa-solid fa-house-chimney-window text-4xl text-green-300"></i>
             <span class="text-xs uppercase tracking-wider text-green-200 font-semibold">Painel Morador</span>
         </div>
-        <nav class="flex-1 p-2 md:p-4 space-y-1">
-            <a href="index.php" class="flex items-center gap-3 p-3 rounded-lg hover:bg-green-600 text-green-100 hover:text-white transition-colors">
+        <nav class="flex-1 p-2 md:p-4 space-y-1 overflow-y-auto">
+            <a href="index.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
                 <i class="fa-solid fa-house w-6 text-center"></i> Início
             </a>
-            <a href="avisos.php" class="flex items-center gap-3 p-3 rounded-lg hover:bg-green-600 text-green-100 hover:text-white transition-colors">
+            <a href="avisos.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
                 <i class="fa-solid fa-bell w-6 text-center"></i> Avisos
             </a>
-            <a href="reservas.php" class="flex items-center gap-3 p-3 bg-green-800 text-green-50 rounded-lg transition-colors font-medium">
-                <i class="fa-solid fa-calendar-check w-6 text-center"></i> Reservas
+            <a href="reservas.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'reservas.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
+                <i class="fa-solid fa-calendar-check w-6 text-center"></i> Minhas Reservas
             </a>
-            <a href="../logout.php" class="flex md:hidden items-center gap-3 p-3 mt-4 text-red-300 hover:bg-green-600 transition rounded-lg">
-                <i class="fa-solid fa-right-from-bracket w-6 text-center"></i> Sair
+            <a href="ocorrencias.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'ocorrencias.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
+                <i class="fa-solid fa-triangle-exclamation w-6 text-center"></i> Ocorrências
+            </a>
+            <a href="regras.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'regras.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
+                <i class="fa-solid fa-scale-balanced w-6 text-center"></i> Regras
+            </a>
+            <a href="chat.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'chat.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
+                <i class="fa-solid fa-comments w-6 text-center"></i> Falar com Síndico
             </a>
         </nav>
     </aside>
@@ -195,7 +201,7 @@ function badgeStatus($status) {
                                                 <h3 class="font-bold text-gray-800 text-lg"><?php echo htmlspecialchars($res['area_nome']); ?></h3>
                                                 <p class="text-gray-500 text-sm mt-1">
                                                     <i class="fa-regular fa-calendar mr-1"></i> Data: <strong class="text-gray-700"><?php echo date('d/m/Y', strtotime($res['data_reserva'])); ?></strong><br>
-                                                    <i class="fa-regular fa-clock mr-1"></i> Horário: <strong class="text-gray-700"><?php echo substr($res['hora_inicio'], 0, 5); ?> às <?php echo substr($res['hora_fim'], 0, 5); ?></strong>
+                                                    <i class="fa-regular fa-clock mr-1"></i> Horário: <strong class="text-gray-700"><?php echo substr($res['horario_inicio'], 0, 5); ?> às <?php echo substr($res['horario_fim'], 0, 5); ?></strong>
                                                 </p>
                                             </div>
                                             <div class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2">

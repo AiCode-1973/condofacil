@@ -11,7 +11,7 @@ require_once '../config/database.php';
 $condominioId = $_SESSION['condominio_id'];
 
 // Buscar regras do condomínio
-$stmt = $pdo->prepare("SELECT * FROM regras WHERE condominio_id = ? ORDER BY data_atualizacao DESC");
+$stmt = $pdo->prepare("SELECT * FROM regras WHERE condominio_id = ? ORDER BY created_at DESC");
 $stmt->execute([$condominioId]);
 $regras = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -72,23 +72,23 @@ $condominioNome = $condominioNome->fetchColumn() ?: "Meu Condomínio";
         </div>
         
         <nav class="flex-1 p-2 md:p-4 space-y-1 overflow-y-auto">
-            <a href="index.php" class="flex items-center gap-3 p-3 rounded-lg hover:bg-green-600 text-green-100 hover:text-white transition-colors">
+            <a href="index.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
                 <i class="fa-solid fa-house w-6 text-center"></i> Início
             </a>
-            <a href="avisos.php" class="flex items-center gap-3 p-3 rounded-lg hover:bg-green-600 text-green-100 hover:text-white transition-colors">
+            <a href="avisos.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'avisos.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
                 <i class="fa-solid fa-bell w-6 text-center"></i> Avisos
             </a>
-            <a href="reservas.php" class="flex items-center gap-3 p-3 rounded-lg hover:bg-green-600 text-green-100 hover:text-white transition-colors">
-                <i class="fa-solid fa-calendar-check w-6 text-center"></i> Reservas
+            <a href="reservas.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'reservas.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
+                <i class="fa-solid fa-calendar-check w-6 text-center"></i> Minhas Reservas
             </a>
-            <a href="ocorrencias.php" class="flex items-center gap-3 p-3 rounded-lg hover:bg-green-600 text-green-100 hover:text-white transition-colors">
+            <a href="ocorrencias.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'ocorrencias.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
                 <i class="fa-solid fa-triangle-exclamation w-6 text-center"></i> Ocorrências
             </a>
-            <a href="regras.php" class="flex items-center gap-3 p-3 bg-green-800 text-green-50 rounded-lg transition-colors font-medium">
-                <i class="fa-solid fa-book w-6 text-center"></i> Regras Internas
+            <a href="regras.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'regras.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
+                <i class="fa-solid fa-scale-balanced w-6 text-center"></i> Regras
             </a>
-            <a href="../logout.php" class="flex md:hidden items-center gap-3 p-3 mt-4 text-red-300 hover:bg-green-600 transition rounded-lg">
-                <i class="fa-solid fa-right-from-bracket w-6 text-center"></i> Sair
+            <a href="chat.php" class="flex items-center gap-3 p-3 <?= basename($_SERVER['PHP_SELF']) == 'chat.php' ? 'bg-green-800 text-green-50 font-medium' : 'hover:bg-green-600 text-green-100 hover:text-white' ?> rounded-lg transition-colors">
+                <i class="fa-solid fa-comments w-6 text-center"></i> Falar com Síndico
             </a>
         </nav>
     </aside>
@@ -142,7 +142,7 @@ $condominioNome = $condominioNome->fetchColumn() ?: "Meu Condomínio";
                                         <?php echo htmlspecialchars($regra['conteudo']); ?>
                                     </div>
                                     <div class="ml-11 mt-4 text-xs text-gray-400">
-                                        <em>Atualizado em: <?php echo date('d/m/Y', strtotime($regra['data_atualizacao'])); ?></em>
+                                        <em>Atualizado em: <?php echo date('d/m/Y', strtotime($regra['created_at'])); ?></em>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
