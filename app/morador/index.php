@@ -12,8 +12,8 @@ $condominioId = $_SESSION['condominio_id'];
 $usuarioId = $_SESSION['usuario_id'];
 
 // Recupera informações básicas
-$usuarioNome = $_SESSION['usuario_nome'];
-$unidade = $_SESSION['unidade'];
+$usuarioNome = $_SESSION['usuario_nome'] ?? 'Morador';
+$unidade = $_SESSION['unidade'] ?? 'N/D';
 
 // Nome do condomínio
 $condominioNome = $pdo->prepare("SELECT nome FROM condominios WHERE id = ?");

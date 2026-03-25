@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        $stmt = $pdo->prepare("SELECT id, nome, email, senha, tipo_acesso, condominio_id, status FROM usuarios WHERE email = ? LIMIT 1");
+        $stmt = $pdo->prepare("SELECT id, nome, email, senha, tipo_acesso, condominio_id, status, unidade FROM usuarios WHERE email = ? LIMIT 1");
         $stmt->execute([$email]);
         $usuario = $stmt->fetch();
 
@@ -31,6 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['usuario_nome'] = $usuario['nome'];
             $_SESSION['tipo_acesso'] = $usuario['tipo_acesso'];
             $_SESSION['condominio_id'] = $usuario['condominio_id'];
+            $_SESSION['unidade'] = $usuario['unidade'];
 
             // Redirecionamento Baseado no Nível de Acesso
             switch ($usuario['tipo_acesso']) {
