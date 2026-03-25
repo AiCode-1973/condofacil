@@ -19,6 +19,41 @@ $unidade = $_SESSION['unidade'] ?? 'N/D';
 $condominioNome = $pdo->prepare("SELECT nome FROM condominios WHERE id = ?");
 $condominioNome->execute([$condominioId]);
 $condominioNome = $condominioNome->fetchColumn() ?: "Meu Condomínio";
+
+$moradorId = $_SESSION['usuario_id'];
+
+// Total de Avisos
+$totalAvisos = $pdo->prepare("SELECT COUNT(*) FROM avisos WHERE condominio_id = ?");
+$totalAvisos->execute([$condominioId]);
+$totalAvisos = $totalAvisos->fetchColumn();
+
+// Minhas Reservas
+$minhasReservas = $pdo->prepare("SELECT COUNT(*) FROM reservas WHERE condominio_id = ? AND usuario_id = ?");
+$minhasReservas->execute([$condominioId, $moradorId]);
+$minhasReservas = $minhasReservas->fetchColumn();
+
+// Mensagens não lidas
+$mensagensNaoLidas = $pdo->prepare("SELECT COUNT(*) FROM mensagens_chat WHERE condominio_id = ? AND destinatario_id = ? AND lida = 0");
+$mensagensNaoLidas->execute([$condominioId, $moradorId]);
+$mensagensNaoLidas = $mensagensNaoLidas->fetchColumn();
+
+// Minhas Ocorrências
+$minhasOcorrencias = $pdo->prepare("SELECT COUNT(*) FROM ocorrencias WHERE condominio_id = ? AND usuario_id = ?");
+$minhasOcorrencias->execute([$condominioId, $moradorId]);
+$minhasOcorrencias = $minhasOcorrencias->fetchColumn();
+
+// Últimos Avisos
+$ultimosAvisos = $pdo->prepare("SELECT * FROM avisos WHERE condominio_id = ? ORDER BY created_at DESC LIMIT 3");
+$ultimosAvisos->execute([$condominioId]);
+$ultimosAvisos = $ultimosAvisos->fetchAll(PDO::FETCH_ASSOC);
+
+function badgePrioridade($prioridade) {
+    switch($prioridade) {
+        case 'urgente': return '<span class="px-2 py-0.5 bg-red-100 text-red-800 text-[10px] uppercase font-bold rounded shadow-sm">Urgente</span>';
+        case 'alerta': return '<span class="px-2 py-0.5 bg-yellow-100 text-yellow-800 text-[10px] uppercase font-bold rounded shadow-sm">Alerta</span>';
+        default: return '<span class="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] uppercase font-bold rounded shadow-sm">Informativo</span>';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -148,7 +183,7 @@ $condominioNome = $condominioNome->fetchColumn() ?: "Meu Condomínio";
                         </div>
                         <span class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded-full">Atualizado</span>
                     </div>
-                    <p class="text-2xl md:text-3xl font-bold text-gray-800">0</p>
+                      <p class="text-2xl md:text-3xl font-bold text-gray-800"><?php echo $totalAvisos; ?></p>
                     <p class="text-xs md:text-sm font-medium text-gray-500 mt-1">Avisos Recentes</p>
                 </a>
 
@@ -160,7 +195,7 @@ $condominioNome = $condominioNome->fetchColumn() ?: "Meu Condomínio";
                             <i class="fa-solid fa-calendar-check"></i>
                         </div>
                     </div>
-                    <p class="text-2xl md:text-3xl font-bold text-gray-800">0</p>
+                      <p class="text-2xl md:text-3xl font-bold text-gray-800"><?php echo $minhasReservas; ?></p>
                     <p class="text-xs md:text-sm font-medium text-gray-500 mt-1">Minhas Reservas</p>
                 </a>
 
@@ -171,7 +206,7 @@ $condominioNome = $condominioNome->fetchColumn() ?: "Meu Condomínio";
                             <i class="fa-solid fa-comments"></i>
                         </div>
                     </div>
-                    <p class="text-2xl md:text-3xl font-bold text-gray-800">-</p>
+                      <p class="text-2xl md:text-3xl font-bold text-gray-800"><?php echo $mensagensNaoLidas; ?></p>
                     <p class="text-xs md:text-sm font-medium text-gray-500 mt-1">Chat / Mensagens</p>
                 </a>
                 
@@ -182,7 +217,7 @@ $condominioNome = $condominioNome->fetchColumn() ?: "Meu Condomínio";
                             <i class="fa-solid fa-triangle-exclamation"></i>
                         </div>
                     </div>
-                    <p class="text-2xl md:text-3xl font-bold text-gray-800">0</p>
+                      <p class="text-2xl md:text-3xl font-bold text-gray-800"><?php echo $minhasOcorrencias; ?></p>
                     <p class="text-xs md:text-sm font-medium text-gray-500 mt-1">Minhas Ocorrências</p>
                 </a>
 
@@ -196,20 +231,43 @@ $condominioNome = $condominioNome->fetchColumn() ?: "Meu Condomínio";
                     
                     <!-- Último Aviso Importante em Destaque Mobile/Desktop -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="px-5 py-4 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
-                            <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
-                                <i class="fa-solid fa-bullhorn text-yellow-500"></i> Mural de Avisos
-                            </h2>
-                        </div>
-                        <div class="p-8 text-center bg-white flex flex-col items-center justify-center min-h-[200px]">
-                            <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
-                                <i class="fa-regular fa-folder-open text-3xl text-gray-300"></i>
+                            <div class="px-5 py-4 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
+                                <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                                    <i class="fa-solid fa-bullhorn text-yellow-500"></i> Mural de Avisos
+                                </h2>
+                                <a href="avisos.php" class="text-sm font-medium text-green-600 hover:text-green-700">Ver todos</a>
                             </div>
-                            <h3 class="text-gray-900 font-semibold mb-1">Caixa Vazia</h3>
-                            <p class="text-gray-500 text-sm max-w-xs">Não há nenhum aviso do síndico ou administração no momento.</p>
+                            <div class="divide-y divide-gray-100">
+                                <?php if(empty($ultimosAvisos)): ?>
+                                    <div class="p-8 text-center bg-white flex flex-col items-center justify-center min-h-[200px]">
+                                        <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                                            <i class="fa-regular fa-folder-open text-3xl text-gray-300"></i>
+                                        </div>
+                                        <h3 class="text-gray-900 font-semibold mb-1">Caixa Vazia</h3>
+                                        <p class="text-gray-500 text-sm max-w-xs">Não há nenhum aviso do síndico ou administração no momento.</p>
+                                    </div>
+                                <?php else: ?>
+                                    <?php foreach($ultimosAvisos as $aviso): ?>
+                                        <div class="p-5 hover:bg-gray-50 transition-colors">
+                                            <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                                                <div class="flex-1">
+                                                    <div class="flex items-center gap-3 mb-2">
+                                                        <?php echo badgePrioridade($aviso['prioridade']); ?>
+                                                        <span class="text-xs font-semibold text-gray-400 flex items-center gap-1">
+                                                            <i class="fa-regular fa-clock"></i> 
+                                                            <?php echo date('d/m/Y', strtotime($aviso['created_at'])); ?> 
+                                                            às <?php echo date('H:i', strtotime($aviso['created_at'])); ?>
+                                                        </span>
+                                                    </div>
+                                                    <h3 class="text-base font-bold text-gray-900 mb-1"><?php echo htmlspecialchars($aviso['titulo']); ?></h3>
+                                                    <p class="text-sm text-gray-600 leading-relaxed"><?php echo nl2br(htmlspecialchars($aviso['conteudo'])); ?></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </div>
                         </div>
-                    </div>
-
                     <!-- Botões de Ação Rápida (visíveis com mais ênfase no mobile) -->
                     <div class="md:hidden grid grid-cols-2 gap-4">
                         <button class="bg-green-600 text-white p-4 rounded-xl font-bold shadow-md flex flex-col items-center gap-2">
