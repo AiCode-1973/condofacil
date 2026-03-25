@@ -12,7 +12,7 @@ $condominioId = $_SESSION['condominio_id'];
 $usuarioNome = $_SESSION['usuario_nome'];
 
 // Busca todos os avisos do condomínio
-$stmt = $pdo->prepare("SELECT * FROM avisos WHERE condominio_id = ? ORDER BY data_criacao DESC");
+$stmt = $pdo->prepare("SELECT * FROM avisos WHERE condominio_id = ? ORDER BY created_at DESC");
 $stmt->execute([$condominioId]);
 $avisos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -107,16 +107,16 @@ $condominioNome = $condominioNome->fetchColumn() ?: "Meu Condomínio";
                                         <i class="fa-solid fa-thumbtack"></i>
                                     </div>
                                     <h3 class="text-xl font-bold text-gray-800 mb-2 truncate pr-6"><?php echo htmlspecialchars($aviso['titulo']); ?></h3>
-                                    <p class="text-gray-600 text-sm md:text-base leading-relaxed whitespace-pre-wrap mb-4"><?php echo htmlspecialchars($aviso['mensagem']); ?></p>
+                                    <p class="text-gray-600 text-sm md:text-base leading-relaxed whitespace-pre-wrap mb-4"><?php echo htmlspecialchars($aviso['conteudo']); ?></p>
                                     
                                     <div class="flex items-center text-xs text-gray-500 border-t border-gray-100 pt-3">
                                         <div class="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded">
                                             <i class="fa-regular fa-calendar"></i>
-                                            <span><?php echo date('d/m/Y', strtotime($aviso['data_criacao'])); ?></span>
+                                            <span><?php echo date('d/m/Y', strtotime($aviso['created_at'])); ?></span>
                                         </div>
                                         <div class="flex items-center gap-1 ml-3 bg-gray-100 px-2 py-1 rounded">
                                             <i class="fa-regular fa-clock"></i>
-                                            <span><?php echo date('H:i', strtotime($aviso['data_criacao'])); ?></span>
+                                            <span><?php echo date('H:i', strtotime($aviso['created_at'])); ?></span>
                                         </div>
                                     </div>
                                 </div>

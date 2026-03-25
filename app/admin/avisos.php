@@ -15,12 +15,13 @@ $mensagemSucesso = '';
 // Processa o formulário de criação e exclusão
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['acao']) && $_POST['acao'] === 'criar') {
+        $autorId = $_SESSION['usuario_id'];
         $titulo = trim($_POST['titulo']);
         $mensagem = trim($_POST['mensagem']);
 
         if (!empty($titulo) && !empty($mensagem)) {
-            $stmt = $pdo->prepare("INSERT INTO avisos (condominio_id, titulo, mensagem, data_criacao) VALUES (?, ?, ?, NOW())");
-            if ($stmt->execute([$condominioId, $titulo, $mensagem])) {
+            $stmt = $pdo->prepare("INSERT INTO avisos (condominio_id, autor_id, titulo, conteudo) VALUES (?, ?, ?, ?)");
+            if ($stmt->execute([$condominioId, $autorId, $titulo, $mensagem])) {
                 $mensagemSucesso = "Aviso publicado com sucesso!";
             } else {
                 $mensagemErro = "Erro ao publicar o aviso.";
@@ -40,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Busca todos os avisos do condomínio
-$stmt = $pdo->prepare("SELECT * FROM avisos WHERE condominio_id = ? ORDER BY data_criacao DESC");
+$stmt = $pdo->prepare("SELECT * FROM avisos WHERE condominio_id = ? ORDER BY created_at DESC");
 $stmt->execute([$condominioId]);
 $avisos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -135,9 +136,9 @@ $avisos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                     </button>
                                                 </form>
                                             </div>
-                                            <p class="text-gray-600 text-sm whitespace-pre-wrap"><?php echo htmlspecialchars($aviso['mensagem']); ?></p>
+                                            <p class="text-gray-600 text-sm whitespace-pre-wrap"><?php echo htmlspecialchars($aviso['conteudo']); ?></p>
                                             <div class="mt-3 text-xs text-gray-400 flex items-center gap-1">
-                                                <i class="fa-regular fa-clock"></i> Publicado em: <?php echo date('d/m/Y H:i', strtotime($aviso['data_criacao'])); ?>
+                                                <i class="fa-regular fa-clock"></i> Publicado em: <?php echo date('d/m/Y H:i', strtotime($aviso['created_at'])); ?>
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
