@@ -200,28 +200,28 @@
     </section>
 
     <!-- 5. Seção “Como funciona na prática” -->
-    <section class="py-20 bg-white">
+    <section class="py-20 bg-white overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl font-bold text-slate-900">Como o CondoFácil funciona em 3 passos</h2>
                 <p class="mt-4 text-lg text-slate-600">A partir daí, reservas, avisos, ocorrências e chats passam a ficar centralizados dentro do CondoFácil.</p>
             </div>
 
-            <div class="flex flex-col md:flex-row justify-center items-start gap-8 relative">
+            <div class="flex flex-col md:flex-row justify-center items-center md:items-start gap-12 md:gap-8 relative">
                 <!-- Step 1 -->
-                <div class="flex-1 text-center relative z-10 bg-white pt-6">
+                <div class="flex-1 text-center relative z-10 bg-white pt-6 w-full max-w-sm">
                     <div class="w-16 h-16 bg-primary text-white font-bold text-2xl rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-white shadow-md">1</div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Cadastre seu condomínio</h3>
                     <p class="text-slate-600">Informe os dados básicos, cadastre blocos, unidades e usuários rapidamente.</p>
                 </div>
                 <!-- Step 2 -->
-                <div class="flex-1 text-center relative z-10 bg-white pt-6">
+                <div class="flex-1 text-center relative z-10 bg-white pt-6 w-full max-w-sm">
                     <div class="w-16 h-16 bg-primary text-white font-bold text-2xl rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-white shadow-md">2</div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Configure áreas e regras</h3>
                     <p class="text-slate-600">Defina horários, limites e regras de uso das áreas compartilhadas para os moradores.</p>
                 </div>
                 <!-- Step 3 -->
-                <div class="flex-1 text-center relative z-10 bg-white pt-6">
+                <div class="flex-1 text-center relative z-10 bg-white pt-6 w-full max-w-sm">
                     <div class="w-16 h-16 bg-primary text-white font-bold text-2xl rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-white shadow-md">3</div>
                     <h3 class="text-xl font-bold text-slate-900 mb-2">Convide síndicos e moradores</h3>
                     <p class="text-slate-600">Cada um recebe acesso personalizado e começa a usar o sistema no dia a dia.</p>
