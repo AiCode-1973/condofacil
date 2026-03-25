@@ -10,7 +10,7 @@ require_once '../config/database.php';
 
 // Busca dados resumo para o condominio do sindico
 $condominioId = $_SESSION['condominio_id'];
-$totalMoradores = $pdo->prepare("SELECT COUNT(*) FROM usuarios WHERE condomio_id = ? AND tipo_acesso = 'morador'");
+$totalMoradores = $pdo->prepare("SELECT COUNT(*) FROM usuarios WHERE condominio_id = ? AND tipo_acesso = 'morador'");
 $totalMoradores->execute([$condominioId]);
 $totalMoradores = $totalMoradores->fetchColumn();
 

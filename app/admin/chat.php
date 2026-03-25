@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
 }
 
 // 2. Obter lista de moradores do condomínio para abrir o chat
-$stmt = $pdo->prepare("SELECT id, nome, unidade FROM usuarios WHERE condomio_id = ? AND tipo_acesso = 'morador' ORDER BY nome ASC");
+$stmt = $pdo->prepare("SELECT id, nome, unidade FROM usuarios WHERE condominio_id = ? AND tipo_acesso = 'morador' ORDER BY nome ASC");
 $stmt->execute([$condominioId]);
 $moradores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -37,7 +37,7 @@ $moradorAtivo = null;
 
 if ($chatAtivo) {
     // Pegar detalhes do morador
-    $stmt = $pdo->prepare("SELECT id, nome, unidade FROM usuarios WHERE id = ? AND condomio_id = ?");
+    $stmt = $pdo->prepare("SELECT id, nome, unidade FROM usuarios WHERE id = ? AND condominio_id = ?");
     $stmt->execute([$chatAtivo, $condominioId]);
     $moradorAtivo = $stmt->fetch(PDO::FETCH_ASSOC);
 

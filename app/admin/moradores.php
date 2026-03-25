@@ -20,13 +20,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
         $unidade = trim($_POST['unidade']);
         
         // Verifica se e-mail já existe no mesmo condomínio para não duplicar moradores
-        $stmtChk = $pdo->prepare("SELECT id FROM usuarios WHERE email = ? AND condomio_id = ?");
+        $stmtChk = $pdo->prepare("SELECT id FROM usuarios WHERE email = ? AND condominio_id = ?");
         $stmtChk->execute([$email, $condominioId]);
         
         if ($stmtChk->rowCount() > 0) {
             $msgErro = "E-mail já cadastrado para este condomínio.";
         } else {
-            $stmt = $pdo->prepare("INSERT INTO usuarios (condomio_id, nome, email, senha, tipo_acesso, unidade) VALUES (?, ?, ?, ?, 'morador', ?)");
+            $stmt = $pdo->prepare("INSERT INTO usuarios (condominio_id, nome, email, senha, tipo_acesso, unidade) VALUES (?, ?, ?, ?, 'morador', ?)");
             $stmt->execute([$condominioId, $nome, $email, $senha, $unidade]);
             header("Location: moradores.php?sucesso=1");
             exit;
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
     if ($_POST['acao'] === 'deletar_morador') {
         $idDeletar = intval($_POST['id']);
         // Segurança: só apaga seo o morador pertencer a este condomínio
-        $stmt = $pdo->prepare("DELETE FROM usuarios WHERE id = ? AND condomio_id = ? AND tipo_acesso = 'morador'");
+        $stmt = $pdo->prepare("DELETE FROM usuarios WHERE id = ? AND condominio_id = ? AND tipo_acesso = 'morador'");
         $stmt->execute([$idDeletar, $condominioId]);
         header("Location: moradores.php?deletado=1");
         exit;
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
 }
 
 // 3. Listar Moradores
-$stmt = $pdo->prepare("SELECT * FROM usuarios WHERE condomio_id = ? AND tipo_acesso = 'morador' ORDER BY unidade ASC, nome ASC");
+$stmt = $pdo->prepare("SELECT * FROM usuarios WHERE condominio_id = ? AND tipo_acesso = 'morador' ORDER BY unidade ASC, nome ASC");
 $stmt->execute([$condominioId]);
 $moradores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

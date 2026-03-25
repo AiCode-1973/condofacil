@@ -12,7 +12,7 @@ $condominioId = $_SESSION['condominio_id'];
 $moradorId = $_SESSION['usuario_id']; // morador logado
 
 // 1. Obter o Síndico (ou Síndicos, se houver mais de um, simplificamos pegando o primeiro)
-$stmt = $pdo->prepare("SELECT id, nome FROM usuarios WHERE condomio_id = ? AND tipo_acesso = 'admin' LIMIT 1");
+$stmt = $pdo->prepare("SELECT id, nome FROM usuarios WHERE condominio_id = ? AND tipo_acesso = 'admin' LIMIT 1");
 $stmt->execute([$condominioId]);
 $sindico = $stmt->fetch(PDO::FETCH_ASSOC);
 
