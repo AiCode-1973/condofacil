@@ -56,9 +56,9 @@ A plataforma possui um sistema forte de autorização e rotas divididas em três
 
 ---
 
-## 🔑 Logins de Teste Padrão
+## 🔑 Logins de Teste
 
-Caso necessite testar o painel inicial rapidamente, recomendamos os seguintes acessos fictícios (se a base for recém-inicializada):
+Utilize os seguintes acessos que já estão pré-configurados no banco de dados para explorar os diferentes níveis de permissão da plataforma:
 
 **Acesso do Superadmin (Dono do SaaS)**
 * E-mail: `super@condofacil.com`
@@ -72,4 +72,4 @@ Caso necessite testar o painel inicial rapidamente, recomendamos os seguintes ac
 * E-mail: `morador.apto01@exemplo.com`
 * Senha: `123456`
 
-> **Aviso de Teste:** O arquivo `app/instalar.php` pode ser visitado pelo navegador para dropar estruturas e reconstruir do zero com um Superadmin inserido por default. Nele você poderá cadastrar síndicos que, em login próprio, cadastrarão os moradores de teste!
+> **Nota:** Como os dados já foram inseridos, você pode começar os testes imediatamente usando as credenciais acima. Caso em algum momento queira zerar todo o banco de dados e as tabelas, basta rodar o script `app/instalar.php`.
