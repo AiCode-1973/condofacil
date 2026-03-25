@@ -25,9 +25,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
     exit;
 }
 
-// 2. Obter lista de moradores do condomínio para abrir o chat
-$stmt = $pdo->prepare("SELECT id, nome, unidade FROM usuarios WHERE condominio_id = ? AND tipo_acesso = 'morador' ORDER BY nome ASC");
-$stmt->execute([$condominioId]);
+// 2. Obter lista de moradores do condomínio para abrir o chat, com contagem de mensagens não lidas
+$stmt = $pdo->prepare("
+    SELECT u.id, u.nome, u.unidade, 
+           (SELECT COUNT(*) FROM mensagens_chat m WHERE m.remetente_id = u.id AND m.destinatario_id = ? AND m.lida = 0) as nao_lidas 
+    FROM usuarios u 
+    WHERE u.condominio_id = ? AND u.tipo_acesso = 'morador' 
+    ORDER BY nao_lidas DESC, u.nome ASC
+");
+$stmt->execute([$sindicoId, $condominioId]);
 $moradores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // 3. Carregar Conversa Específica se houver um id na URL
@@ -121,8 +127,11 @@ if ($chatAtivo) {
                          </div>
                          <div class="flex-1 min-w-0">
                              <div class="flex justify-between items-center mb-0.5">
-                                 <h3 class="text-sm font-bold text-gray-900 truncate"><?php echo htmlspecialchars($morador['nome']); ?></h3>
-                             </div>
+                                 <h3 class="text-sm font-bold text-gray-900 truncate"><?php echo htmlspecialchars($morador['nome']); ?></h3>                                    <?php if ($morador['nao_lidas'] > 0): ?>
+                                        <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                                            <?php echo $morador['nao_lidas']; ?>
+                                        </span>
+                                    <?php endif; ?>                             </div>
                              <p class="text-xs text-gray-500 truncate">Apto: <?php echo htmlspecialchars($morador['unidade']); ?></p>
                          </div>
                      </a>
