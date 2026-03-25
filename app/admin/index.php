@@ -18,6 +18,23 @@ $totalMoradores = $totalMoradores->fetchColumn();
 $condominioNome = $pdo->prepare("SELECT nome FROM condominios WHERE id = ?");
 $condominioNome->execute([$condominioId]);
 $condominioNome = $condominioNome->fetchColumn() ?: "Seu Condomínio";
+
+$sindicoId = $_SESSION['usuario_id'];
+
+// Mensagens Chat não lidas
+$totalMensagens = $pdo->prepare("SELECT COUNT(*) FROM mensagens_chat WHERE condominio_id = ? AND destinatario_id = ? AND lida = 0");
+$totalMensagens->execute([$condominioId, $sindicoId]);
+$totalMensagens = $totalMensagens->fetchColumn();
+
+// Ocorrências Pendentes (abertas)
+$totalOcorrencias = $pdo->prepare("SELECT COUNT(*) FROM ocorrencias WHERE condominio_id = ? AND status = 'pendente'");
+$totalOcorrencias->execute([$condominioId]);
+$totalOcorrencias = $totalOcorrencias->fetchColumn();
+
+// Reservas de hoje em diante pendentes
+$totalReservas = $pdo->prepare("SELECT COUNT(*) FROM reservas WHERE condominio_id = ? AND status = 'pendente'");
+$totalReservas->execute([$condominioId]);
+$totalReservas = $totalReservas->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -102,25 +119,25 @@ $condominioNome = $condominioNome->fetchColumn() ?: "Seu Condomínio";
                 <div class="bg-white rounded-xl shadow-sm border-l-4 border-yellow-500 p-6">
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Ocorrências Pendentes</p>
                     <div class="flex items-end justify-between mt-3">
-                        <p class="text-3xl font-bold text-gray-800">0</p>
+                          <p class="text-3xl font-bold text-gray-800"><?php echo $totalOcorrencias; ?></p>
                         <i class="fa-solid fa-triangle-exclamation text-2xl text-yellow-200"></i>
                     </div>
                 </div>
 
                 <!-- Widget -->
                 <div class="bg-white rounded-xl shadow-sm border-l-4 border-blue-500 p-6">
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Reservas Hoje</p>
-                    <div class="flex items-end justify-between mt-3">
-                        <p class="text-3xl font-bold text-gray-800">0</p>
+                      <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Reservas Pendentes</p>
+                      <div class="flex items-end justify-between mt-3">
+                          <p class="text-3xl font-bold text-gray-800"><?php echo $totalReservas; ?></p>
                         <i class="fa-solid fa-calendar-day text-2xl text-blue-200"></i>
                     </div>
                 </div>
                 
                  <!-- Widget -->
                 <div class="bg-white rounded-xl shadow-sm border-l-4 border-purple-500 p-6">
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Mensagens Chat</p>
-                    <div class="flex items-end justify-between mt-3">
-                        <p class="text-3xl font-bold text-gray-800">0</p>
+                      <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Mensagens Chat (Não lidas)</p>
+                      <div class="flex items-end justify-between mt-3">
+                          <p class="text-3xl font-bold text-gray-800"><?php echo $totalMensagens; ?></p>
                         <i class="fa-solid fa-comments text-2xl text-purple-200"></i>
                     </div>
                 </div>
